@@ -4,7 +4,6 @@ import {
   UserGroupIcon,
   PlusIcon,
   CurrencyDollarIcon,
-  CalendarIcon,
   UsersIcon,
   ReceiptRefundIcon,
   ArrowsRightLeftIcon,

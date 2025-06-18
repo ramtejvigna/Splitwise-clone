@@ -7,6 +7,7 @@ import GroupDetail from './components/GroupDetail';
 import CreateGroup from './components/CreateGroup';
 import CreateExpense from './components/CreateExpense';
 import UserBalance from './components/UserBalance';
+import Chatbot from './components/Chatbot';
 import { apiService } from './services/api';
 import type { User } from './types';
 
@@ -57,6 +58,8 @@ function App() {
           <Route path="/groups/:id/add-expense" element={<CreateExpense />} />
           <Route path="/my-balance" element={<UserBalance currentUser={currentUser} />} />
         </Routes>
+        {/* Chatbot - available on all pages */}
+        <Chatbot />
       </Layout>
     </Router>
   );

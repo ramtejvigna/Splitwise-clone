@@ -84,3 +84,11 @@ class SimplifiedBalance(BaseModel):
     from_user: str
     to_user: str
     amount: float
+
+class ChatMessage(BaseModel):
+    message: str
+    user_id: Optional[int] = None
+    
+class ChatResponse(BaseModel):
+    response: str
+    context_used: Optional[dict] = None

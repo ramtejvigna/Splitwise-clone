@@ -8,6 +8,8 @@ import type {
   ExpenseCreate,
   GroupBalances,
   UserBalances,
+  ChatRequest,
+  ChatResponse,
 } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
@@ -70,6 +72,12 @@ export const apiService = {
 
   async getUserBalances(userId: number): Promise<UserBalances> {
     const response = await api.get(`/users/${userId}/balances`);
+    return response.data;
+  },
+
+  // Chatbot
+  async sendChatMessage(chatRequest: ChatRequest): Promise<ChatResponse> {
+    const response = await api.post('/chat', chatRequest);
     return response.data;
   },
 };

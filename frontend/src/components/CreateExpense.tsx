@@ -4,7 +4,6 @@ import {
   CurrencyDollarIcon,
   PlusIcon,
   ChevronLeftIcon,
-  UserIcon,
 } from '@heroicons/react/24/outline';
 import { apiService } from '../services/api';
 import type { GroupDetail, ExpenseCreate } from '../types';

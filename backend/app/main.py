@@ -6,6 +6,7 @@ import time
 import logging
 from app import operations, models, schemas
 from app.database import SessionLocal, create_tables
+from app.chatbot_service import chatbot_service
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -120,6 +121,7 @@ def read_group_expenses(group_id: int, db: Session = Depends(get_db)):
     
     return operations.get_group_expenses(db, group_id)
 
+# <------ Balance tracking ------>
 # Balance endpoints
 @app.get("/groups/{group_id}/balances")
 def read_group_balances(group_id: int, db: Session = Depends(get_db)):
@@ -177,6 +179,24 @@ def read_user_balances(user_id: int, db: Session = Depends(get_db)):
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = db.query(models.User).offset(skip).limit(limit).all()
     return users
+
+# Chatbot endpoint
+@app.post("/chat", response_model=schemas.ChatResponse)
+def chat_query(chat_message: schemas.ChatMessage, db: Session = Depends(get_db)):
+    """Handle chatbot queries about expenses, balances, and groups"""
+    try:
+        result = chatbot_service.process_chat_query(
+            db=db, 
+            user_query=chat_message.message,
+            user_id=chat_message.user_id
+        )
+        return schemas.ChatResponse(
+            response=result["response"],
+            context_used=result["context_used"]
+        )
+    except Exception as e:
+        logger.error(f"Chatbot error: {e}")
+        raise HTTPException(status_code=500, detail="Sorry, I encountered an error processing your request.")
 
 if __name__ == "__main__":
     import uvicorn

@@ -67,4 +67,26 @@ export interface UserBalances {
     group_name: string;
     balance: number;
   }>;
+}
+
+export interface ChatMessage {
+  id: string;
+  message: string;
+  isUser: boolean;
+  timestamp: Date;
+}
+
+export interface ChatRequest {
+  message: string;
+  user_id?: number;
+}
+
+export interface ChatResponse {
+  response: string;
+  context_used?: {
+    users_count: number;
+    groups_count: number;
+    expenses_count: number;
+    balances_count: number;
+  };
 } 
