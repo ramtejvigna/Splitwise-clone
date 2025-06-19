@@ -7,7 +7,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://neondb_owner:hqBrZ76pSXUP@ep-ancient-rain-a4aqan3e.us-east-1.aws.neon.tech/neondb
+      - DATABASE_URL_UNPOOLED='your_database_url_here'
+      - HUGGINGFACE_API_TOKEN='your_token_here'
     volumes:
       - ./backend:/app
       - /app/venv

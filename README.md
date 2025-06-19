@@ -98,27 +98,167 @@ npm run dev
 
 ## API Documentation
 
+### Authentication
+Currently, the API does not implement authentication. This is a planned feature for future releases.
+
+### Base URL
+- Local Development: `http://localhost:8000`
+- API Documentation (Swagger UI): `http://localhost:8000/docs`
+
 ### Group Endpoints
 
-- `GET /groups`: Get all groups for the authenticated user
-- `POST /groups`: Create a new group
-  - Body: `{ "name": string, "description": string }`
-- `GET /groups/{group_id}`: Get group details
-- `PUT /groups/{group_id}`: Update group details
-- `DELETE /groups/{group_id}`: Delete a group
+#### Get All Groups
+- **GET** `/groups`
+- **Query Parameters:**
+  - `skip` (optional): Number of records to skip (default: 0)
+  - `limit` (optional): Maximum number of records to return (default: 100)
+- **Response:** List of groups
+```json
+[
+  {
+    "id": 1,
+    "name": "Trip to Paris",
+    "created_at": "2024-03-15T10:30:00",
+    "users": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com"
+      }
+    ]
+  }
+]
+```
+
+#### Create Group
+- **POST** `/groups`
+- **Request Body:**
+```json
+{
+  "name": "Trip to Paris",
+  "user_ids": [1, 2, 3]
+}
+```
+- **Response:** Created group object
+
+#### Get Group Details
+- **GET** `/groups/{group_id}`
+- **Response:** Detailed group information including total expenses
+```json
+{
+  "id": 1,
+  "name": "Trip to Paris",
+  "created_at": "2024-03-15T10:30:00",
+  "users": [...],
+  "total_expenses": 1000.50
+}
+```
 
 ### Expense Endpoints
 
-- `POST /expenses`: Create a new expense
-  - Body: `{ "group_id": int, "amount": float, "description": string, "paid_by": int, "split_type": string, "splits": array }`
-- `GET /expenses/{group_id}`: Get all expenses in a group
-- `PUT /expenses/{expense_id}`: Update an expense
-- `DELETE /expenses/{expense_id}`: Delete an expense
+#### Create Expense
+- **POST** `/groups/{group_id}/expenses`
+- **Request Body:**
+```json
+{
+  "description": "Hotel Booking",
+  "amount": 200.50,
+  "paid_by": 1,
+  "split_type": "equal",
+  "splits": {}  // For percentage splits: {"1": 50, "2": 50}
+}
+```
+- **Notes:**
+  - `split_type` can be either "equal" or "percentage"
+  - For percentage splits, the sum must equal 100
+  - The payer must be a member of the group
 
-### User Balance Endpoints
+#### Get Group Expenses
+- **GET** `/groups/{group_id}/expenses`
+- **Response:** List of all expenses in the group
 
-- `GET /balances`: Get overall balances for the current user
-- `GET /balances/{group_id}`: Get balances within a specific group
+### Balance Endpoints
+
+#### Get Group Balances
+- **GET** `/groups/{group_id}/balances`
+- **Response:** Group balance information including simplified transactions
+```json
+{
+  "group_id": 1,
+  "group_name": "Trip to Paris",
+  "balances": [
+    {
+      "user_id": 1,
+      "user_name": "John",
+      "balance": 100.50
+    }
+  ],
+  "simplified_transactions": [
+    {
+      "from_user": "Alice",
+      "to_user": "Bob",
+      "amount": 50.25
+    }
+  ]
+}
+```
+
+#### Get User Balances
+- **GET** `/users/{user_id}/balances`
+- **Response:** User's balance across all groups
+```json
+{
+  "user_id": 1,
+  "user_name": "John",
+  "total_balance": 150.75,
+  "group_balances": [
+    {
+      "group_id": 1,
+      "group_name": "Trip to Paris",
+      "balance": 100.50
+    }
+  ]
+}
+```
+
+### User Endpoints
+
+#### Get All Users
+- **GET** `/users`
+- **Query Parameters:**
+  - `skip` (optional): Number of records to skip (default: 0)
+  - `limit` (optional): Maximum number of records to return (default: 100)
+- **Response:** List of users
+
+### Chatbot Endpoint
+
+#### Send Chat Message
+- **POST** `/chat`
+- **Request Body:**
+```json
+{
+  "message": "What's my current balance?",
+  "user_id": 1
+}
+```
+- **Response:**
+```json
+{
+  "response": "Your current total balance is $150.75...",
+  "context_used": {
+    // Additional context information used to generate response
+  }
+}
+```
+
+### Error Responses
+All endpoints may return the following error responses:
+- `400 Bad Request`: Invalid input data
+- `404 Not Found`: Requested resource not found
+- `500 Internal Server Error`: Server-side error
+
+### Rate Limiting
+The API implements rate limiting to prevent abuse. Specific limits are configured server-side.
 
 ## Assumptions and Design Decisions
 
