@@ -28,7 +28,7 @@ const MessageDisplay: React.FC<{ message: ChatMessage }> = ({ message }) => {
             // Inline code
             .replace(/`([^`]+)`/g, '<code class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
             // Code blocks
-            .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+            .replace(/```(\w+)?\n([\s\S]*?)```/g, (code) => {
                 return `<pre class="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 my-2 overflow-x-auto">
                     <code class="text-sm font-mono text-gray-800 dark:text-gray-200">${code.trim()}</code>
                 </pre>`;

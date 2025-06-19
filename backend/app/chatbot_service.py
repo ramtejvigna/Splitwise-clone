@@ -183,7 +183,7 @@ Based on the complete data above, provide a helpful, accurate, and detailed answ
 
 Guidelines:
 1. Use exact numbers and names from the data
-2. Be conversational and friendly
+2. Be conversational and friendly. Don't provide any information that is not in the data.
 3. Provide specific details when asked
 4. If asked about amounts, always use ₹ (Indian Rupees)
 5. If asked about trends or patterns, analyze the data provided
@@ -192,6 +192,7 @@ Guidelines:
 8. Always be precise with calculations and balances
 9. Include relevant context that might be helpful to the user
 10. If asked about settling debts, suggest the most efficient way
+
 
 ANSWER:"""
         
